@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id = 'heading'>Hello</h1>
+
+    <button onclick = 'changeText()'>Click Me</button>
+    <button onmouseover="changeTextOnHover()">Hover on me</button>
+    <button onmouseleave = 'changeTextOnLeaving()'>Leave me</button>
+    <button onclick = 'changeText()'
+    onmouseleave = 'changeTextOnLeaving()'
+    onmouseover="changeTextOnHover()">
+    Do Whatever
+    </button>
+    <button onclick = 'seeDate()'>See Date</button>
+    <p id = 'dateDisplay'></p>
+    <script>
+        function changeText() {
+            document.getElementById('heading').innerText = 'You just clicked the button';
+        }
+        function changeTextOnHover() {
+            document.getElementById('heading').innerText = 'You hovered over the button';
+        }
+        function changeTextOnLeaving() {
+            document.getElementById('heading').innerText = 'You just left the button';
+        }
+        function seeDate() {
+            let currentDate = new Date();
+            document.getElementById('dateDisplay').innerText = currentDate;
+        }
+    </script>
+</body>
+</html>

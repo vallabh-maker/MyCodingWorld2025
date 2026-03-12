@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Area Calculator</h2>
+
+    <table border = 1>
+        <tr>
+            <th>Sl No.</th>
+            <th>Functionality</th>
+            <th>Input</th>
+            <th>Operation</th>
+            <th>Output</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Area of a Square</td>
+            <td>
+                <label>Side:</label>
+                <input type = 'number' id = 'side' placeholder="Enter side length">
+            </td>
+            <td>
+                <button onclick = 'findAreaSquare()'>Area of Square</button>
+            </td>
+            <td>
+                <p id = 'result_area_square'></p>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Area of a Rectangle</td>
+            <td>
+                <table>
+                    <tr>
+                        <td><label>Length:</label></td>
+                        <td><input type = 'number' id = 'length' placeholder="Enter length"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Breadth:</label></td>
+                        <td><input type = 'number' id = 'breadth' placeholder="Enter breadth"></td>
+                    </tr>
+                </table>
+            </td>            
+            <td>
+                <button onclick = 'findAreaRectangle()'>Area of Rectangle</button>
+            </td>
+            <td>
+                <p id = 'result_area_rectangle'></p>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Area of a Triangle</td>
+            <td>
+                <table>
+                    <tr>
+                        <td><label>Base:</label></td>
+                        <td><input type = 'number' id = 'base' placeholder="Enter base"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Height:</label></td>
+                        <td><input type = 'number' id = 'height' placeholder="Enter height"></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <button onclick = 'findAreaTriangle()'>Area of Triangle</button>
+            </td>
+            <td>
+                <p id = 'result_area_triangle'></p>
+            </td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Area of a Circle</td>
+            <td>
+                <label>Radius:</label>
+                <input type = 'number' id = 'radius' placeholder="Enter radius length">
+            </td>
+            <td>
+                <button onclick = 'findAreaCircle()'>Area of Cirlce</button>
+            </td>
+            <td>
+                <p id = 'result_area_circle'></p>
+            </td>
+        </tr>
+    </table>
+
+    <script src = 'script2.js'></script>
+</body>
+</html>

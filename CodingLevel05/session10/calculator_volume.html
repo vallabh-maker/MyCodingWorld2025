@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Volume Calculator</h2>
+
+    <table border = 1>
+        <tr>
+            <th>Sl No.</th>
+            <th>Functionality</th>
+            <th>Input</th>
+            <th>Operation</th>
+            <th>Output</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Volume of a Cube</td>
+            <td>
+                <label>Side:</label>
+                <input type = 'number' id = 'side' placeholder="Enter side length">
+            </td>
+            <td>
+                <button onclick = 'findVolumeCube()'>Volume of Cube</button>
+            </td>
+            <td>
+                <p id = 'result_volume_cube'></p>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Volume of a Cuboid</td>
+            <td>
+                <table>
+                    <tr>
+                        <td><label>Length:</label></td>
+                        <td><input type = 'number' id = 'length' placeholder="Enter length"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Breadth:</label></td>
+                        <td><input type = 'number' id = 'breadth' placeholder="Enter breadth"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Height:</label></td>
+                        <td><input type = 'number' id = 'height_cuboid' placeholder="Enter height"></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <button onclick = 'findVolumeCuboid()'>Volume of Cuboid</button>
+            </td>
+            <td>
+                <p id = 'result_volume_cuboid'></p>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Volume of a Cone</td>
+            <td>
+                <table>
+                    <tr>
+                        <td><label>Radius:</label></td>
+                        <td><input type = 'number' id = 'radius_cone' placeholder="Enter radius"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Height:</label></td>
+                        <td><input type = 'number' id = 'height_cone' placeholder="Enter height"></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <button onclick = 'findVolumeCone()'>Volume of Cone</button>
+            </td>
+            <td>
+                <p id = 'result_volume_cone'></p>
+            </td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Volume of a Cylinder</td>
+            <td>
+                <table>
+                    <tr>
+                        <td><label>Radius:</label></td>
+                        <td><input type = 'number' id = 'radius_cylinder' placeholder="Enter radius"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Height:</label></td>
+                        <td><input type = 'number' id = 'height_cylinder' placeholder="Enter height"></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <button onclick = 'findVolumeCone()'>Volume of Cylinder</button>
+            </td>
+            <td>
+                <p id = 'result_volume_cylinder'></p>
+            </td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Volume of a Sphere</td>
+            <td>
+                <label>Radius:</label>
+                <input type = 'number' id = 'radius_sphere' placeholder="Enter radius">
+            </td>
+            <td>
+                <button onclick = 'findVolumeSphere()'>Volume of Sphere</button>
+            </td>
+            <td>
+                <p id = 'result_volume_sphere'></p>
+            </td>
+        </tr>
+    </table>
+
+    <script src = 'script3.js'></script>    
+</body>
+
+</html>

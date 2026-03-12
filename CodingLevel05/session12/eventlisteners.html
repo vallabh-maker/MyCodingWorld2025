@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id = 'myBtn'>Click Me</button>
+    <p id = 'demo'></p>
+
+    <script>
+        const btn = document.getElementById('myBtn');
+
+        btn.addEventListener('click', function() {
+            document.getElementById('demo').innerHTML = 'Button was clicked!'
+        });
+        btn.addEventListener('mouseover', function() {
+            document.getElementById('demo').innerHTML = 'Mouse is over the button!'
+        });
+        btn.addEventListener('mouseout', function() {
+            document.getElementById('demo').innerHTML = 'Mouse has left the button!'
+        });
+        btn.addEventListener('dbclick', function() {
+            document.getElementById('demo').innerHTML = 'Button was double clicked!'
+        });
+    </script>
+</body>
+</html>

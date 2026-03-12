@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Basic Arithmetic Calculator</h2>
+
+    <table border = 1>
+        <tr>
+            <th>Sl No.</th>
+            <th>Functionality</th>
+            <th>Input</th>
+            <th>Operation</th>
+            <th>Output</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Sum of two numbers</td>
+            <td rowspan = '5'>
+                <table>
+                    <tr>
+                        <td>Number 1</td>
+                        <td><input type = 'number' id = 'num1' placeholder="Enter first number"></td>
+                    </tr>
+                    <tr>
+                        <td>Number 2</td>
+                        <td><input type = 'number' id = 'num2' placeholder="Enter second number"></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <button onclick = 'findSum()'>Sum</button>
+            </td>
+            <td>
+                <p id='result_sum'></p>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Difference between two numbers</td>
+            <td>
+                <button onclick = 'findDifference()'>Difference</button>
+            </td>
+            <td>
+                <p id='result_difference'></p>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Product of two numbers</td>
+            <td>
+                <button onclick = 'findProduct()'>Product</button>
+            </td>
+            <td>
+                <p id='result_product'></p>
+            </td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Quotient between two numbers</td>
+            <td>
+                <button onclick = 'findQuotient()'>Quotient</button>
+            </td>
+            <td>
+                <p id='result_quotient'></p>
+            </td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Remainder between two numbers</td>
+            <td>
+                <button onclick = 'findRemainder()'>Remainder</button>
+            </td>
+            <td>
+                <p id='result_remainder'></p>
+            </td>
+        </tr>
+    </table>
+    
+
+
+
+    <script src="script1.js"></script>
+</body>
+</html>
