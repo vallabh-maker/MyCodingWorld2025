@@ -1,0 +1,6 @@
+bob
+daniel
+farhan
+bob,60
+daniel,70
+farhan,80
