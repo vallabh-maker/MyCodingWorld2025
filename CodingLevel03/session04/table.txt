@@ -1,0 +1,230 @@
+use school;
+
+create table marksheet
+(
+    rollno integer,
+    name varchar(30),
+    marks float,
+    grade varchar(2),
+    section varchar(1)
+);
+
+desc marksheet;
+
+insert into marksheet(rollno, name, marks, grade, section)
+values(101, 'Ruhani', 76.80, 'A', 'A');
+insert into marksheet(rollno, name, marks, grade, section)
+values(102, 'George', 71.20, 'B', 'A');
+insert into marksheet(rollno, name, marks, grade, section)
+values(103, 'Simran', 81.20, 'A', 'B');
+insert into marksheet(rollno, name, marks, grade, section)
+values(104, 'Ali', 61.20, 'B', 'C');
+insert into marksheet(rollno, name, marks, grade, section)
+values(105, 'Kushal', 51.60, 'C', 'C');
+insert into marksheet(rollno, name, marks, grade, section)
+values(106, 'Raunaq', 32.50, 'F', 'B');
+insert into marksheet(rollno, name, marks, grade, section)
+values(107, 'Arsiya', 91.20, 'A+', 'B');
+insert into marksheet(rollno, name, marks, grade, section)
+values(108, 'Meera', 97.20, 'A+', 'B');
+insert into marksheet(rollno, name, marks, grade, section)
+values(109, 'Amaal', 57.20, 'C', 'B');
+insert into marksheet(rollno, name, marks, grade, section)
+values(110, 'Simran', 66.00, 'B', 'C');
+insert into marksheet(rollno, name, marks, grade, section)
+values(111, 'Adam', 74.20, 'B', 'C');
+insert into marksheet(rollno, name, marks, grade, section)
+values(112, 'Gurnoor', 93.50, 'A+', 'B');
+insert into marksheet(rollno, name, marks, grade, section)
+values(113, 'Rabiya', 72.50, 'B', 'B');
+insert into marksheet(rollno, name, marks, grade, section)
+values(114, 'Rahil', 32.00, 'F', 'C');
+insert into marksheet(rollno, name, marks, grade, section)
+values(115, 'Neha', 32.00, 'F', 'A');
+
+drop marksheet;
+
+create table marksheet
+(
+    rollno integer primary key,
+    name varchar(30) not null,
+    marks float(5, 2) check(marks >=0.0 and marks <= 100.0),
+    grade char(2) check(grade in('A+', 'A', 'B', 'C', 'F')),
+    section char(1) check(section in('A', 'B', 'C'))
+);
+
+1. Write a query to display all the data of marksheet table
+
+select * from marksheet;
+
+OUTPUT:
++--------+---------+-------+-------+---------+
+| rollno | name    | marks | grade | section |
++--------+---------+-------+-------+---------+
+|    101 | Ruhani  | 76.80 | A     | A       |
+|    102 | George  | 71.20 | B     | A       |
+|    103 | Simran  | 81.20 | A     | B       |
+|    104 | Ali     | 61.20 | B     | C       |
+|    105 | Kushal  | 51.60 | C     | C       |
+|    106 | Raunaq  | 32.50 | F     | B       |
+|    107 | Arsiya  | 91.20 | A+    | B       |
+|    108 | Meera   | 97.20 | A+    | B       |
+|    109 | Amaal   | 57.20 | C     | B       |
+|    110 | Simran  | 66.00 | B     | C       |
+|    111 | Adam    | 74.20 | B     | C       |
+|    112 | Gurnoor | 93.50 | A+    | B       |
+|    113 | Rabiya  | 72.50 | B     | B       |
+|    114 | Rahil   | 32.00 | F     | C       |
+|    115 | Neha    | 32.00 | F     | A       |
++--------+---------+-------+-------+---------+
+15 rows in set (0.00 sec)
+
+2. Write a query to display name and marks of all the students
+
+SELECT name, marks FROM marksheet;
+
+OUTPUT
++---------+-------+
+| name    | marks |
++---------+-------+
+| Ruhani  | 76.80 |
+| George  | 71.20 |
+| Simran  | 81.20 |
+| Ali     | 61.20 |
+| Kushal  | 51.60 |
+| Raunaq  | 32.50 |
+| Arsiya  | 91.20 |
+| Meera   | 97.20 |
+| Amaal   | 57.20 |
+| Simran  | 66.00 |
+| Adam    | 74.20 |
+| Gurnoor | 93.50 |
+| Rabiya  | 72.50 |
+| Rahil   | 32.00 |
+| Neha    | 32.00 |
++---------+-------+
+
+3. Write a query to display name, marks and grade of students who have got grade A:
+
+SELECT name, marks, grade FROM marksheet WHERE grade = 'A';
+
+OUTPUT:
++--------+-------+-------+
+| name   | marks | grade |
++--------+-------+-------+
+| Ruhani | 76.80 | A     |
+| Simran | 81.20 | A     |
++--------+-------+-------+
+
+4. Write a query to display the details of students who have scored between 50 and 70:
+
+ SELECT * FROM marksheet WHERE marks >= 50 AND marks <= 70;
+
+ or
+
+ SELECT * FROM marksheet WHERE marks BETWEEN 50 AND 70;
+
+OUTPUT:
++--------+--------+-------+-------+---------+
+| rollno | name   | marks | grade | section |
++--------+--------+-------+-------+---------+
+|    104 | Ali    | 61.20 | B     | C       |
+|    105 | Kushal | 51.60 | C     | C       |
+|    109 | Amaal  | 57.20 | C     | B       |
+|    110 | Simran | 66.00 | B     | C       |
++--------+--------+-------+-------+---------+
+
+5. Write a query to display the details of students who have scored grade A or C:
+
+SELECT * FROM marksheet WHERE grade = 'A' or grade = 'C';
+
+or
+
+SELECT * FROM marksheet WHERE grade IN('A', 'C');
+
+OUTPUT:
++--------+--------+-------+-------+---------+
+| rollno | name   | marks | grade | section |
++--------+--------+-------+-------+---------+
+|    101 | Ruhani | 76.80 | A     | A       |
+|    103 | Simran | 81.20 | A     | B       |
+|    105 | Kushal | 51.60 | C     | C       |
+|    109 | Amaal  | 57.20 | C     | B       |
++--------+--------+-------+-------+---------+
+
+6. Write a query to display all the distinct grades(excluding duplicates):
+
+SELECT DISTINCT grade FROM marksheet;
+
+OUTPUT:
++-------+
+| grade |
++-------+
+| A     |
+| B     |
+| C     |
+| F     |
+| A+    |
++-------+
+
+7. Write a query to display all the distinct sections(excluding duplicates):
+
+SELECT DISTINCT section FROM marksheet;
+
+OUTPUT:
++---------+
+| section |
++---------+
+| A       |
+| B       |
+| C       |
++---------+
+
+8. Write a query to display all the details of students who have not secured grade A or B:
+
+SELECT * FROM marksheet WHERE grade NOT IN('A', 'B');
+
+OUTPUT:
++--------+---------+-------+-------+---------+
+| rollno | name    | marks | grade | section |
++--------+---------+-------+-------+---------+
+|    105 | Kushal  | 51.60 | C     | C       |
+|    106 | Raunaq  | 32.50 | F     | B       |
+|    107 | Arsiya  | 91.20 | A+    | B       |
+|    108 | Meera   | 97.20 | A+    | B       |
+|    109 | Amaal   | 57.20 | C     | B       |
+|    112 | Gurnoor | 93.50 | A+    | B       |
+|    114 | Rahil   | 32.00 | F     | C       |
+|    115 | Neha    | 32.00 | F     | A       |
++--------+---------+-------+-------+---------+
+
+9. Write a query to display all the details of all students whose name starts with 'A':
+
+SELECT * FROM marksheet WHERE name LIKE 'A%';
+
+OUTPUT:
++--------+--------+-------+-------+---------+
+| rollno | name   | marks | grade | section |
++--------+--------+-------+-------+---------+
+|    104 | Ali    | 61.20 | B     | C       |
+|    107 | Arsiya | 91.20 | A+    | B       |
+|    109 | Amaal  | 57.20 | C     | B       |
+|    111 | Adam   | 74.20 | B     | C       |
++--------+--------+-------+-------+---------+
+
+10. Write a query to display all the details of all students whose name contains 'I':
+
+SELECT * FROM marksheet WHERE name LIKE '%I%';
+
+OUTPUT:
++--------+--------+-------+-------+---------+
+| rollno | name   | marks | grade | section |
++--------+--------+-------+-------+---------+
+|    101 | Ruhani | 76.80 | A     | A       |
+|    103 | Simran | 81.20 | A     | B       |
+|    104 | Ali    | 61.20 | B     | C       |
+|    107 | Arsiya | 91.20 | A+    | B       |
+|    110 | Simran | 66.00 | B     | C       |
+|    113 | Rabiya | 72.50 | B     | B       |
+|    114 | Rahil  | 32.00 | F     | C       |
++--------+--------+-------+-------+---------+

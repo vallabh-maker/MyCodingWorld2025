@@ -1,0 +1,738 @@
+CREATE DATABASE vallabh_company;
+
+USE vallabh_company;
+
+drop table department;
+
+CREATE TABLE Department
+(
+   deptno  INTEGER     PRIMARY KEY,
+   dname   VARCHAR(20) NOT NULL,
+   loc     VARCHAR(20)
+);
+
+drop table employees;
+CREATE TABLE Employee
+(
+   empno       INTEGER         PRIMARY KEY,
+   ename       VARCHAR(30)     NOT NULL,
+   job         VARCHAR(20)     CHECK (job IN ('MANAGER', 'CLERK', 'SALESMAN', 'PRESIDENT', 'ANALYST')),
+   mgr         INTEGER,
+   hiredate    DATE,
+   sal         FLOAT(7,2)      CHECK (sal >= 0.0 AND sal <= 100000),
+   comm        FLOAT(7,2),
+   deptno      INTEGER         REFERENCES  department(deptno)    
+);
+
+INSERT INTO department VALUES(10, 'ACCOUNTING', 'NEW DELHI');
+INSERT INTO department VALUES(20, 'RESEARCH', 'CHENNAI');
+INSERT INTO department VALUES(30, 'SALES', 'KOLKATA');
+INSERT INTO department VALUES(40, 'OPERATIONS', 'MUMBAI');
+INSERT INTO department VALUES(50, 'MARKETING', 'BANGALORE');
+INSERT INTO department VALUES(60, 'PRODUCTION', 'AHMEDABAD');
+
+
+
+INSERT INTO Employee VALUES(8369, 'SMITH', 'CLERK', 8902, '1990-12-18', 800.00, NULL, 20);
+INSERT INTO Employee VALUES(8499, 'ANYA', 'SALESMAN', 8698, '1991-02-20', 1600.00, 300.00, 30);
+INSERT INTO Employee VALUES(8521, 'SETH', 'SALESMAN', 8698, '1991-02-22', 1250.00, 500.00, 30);
+INSERT INTO Employee VALUES(8566, 'MAHADEVAN', 'MANAGER', 8839, '1991-04-02', 2985.00, NULL, 20);
+INSERT INTO Employee VALUES(8654, 'MUMIN', 'MANAGER', 8698, '1991-09-28', 1250.00, 1400.00, 30);
+INSERT INTO Employee VALUES(8698, 'BINA', 'MANAGER', 8839, '1991-05-01', 2850.00, NULL, 30);
+INSERT INTO Employee VALUES(8839, 'AMIR', 'PRESIDENT', NULL, '1991-11-18', 5000.00, NULL, 10);
+INSERT INTO Employee VALUES(8844, 'KULDEEP', 'SALESMAN', 8698, '1991-09-08', 1500.00, 0.00, 30);
+INSERT INTO Employee VALUES(8882, 'SHAIVNSH', 'MANAGER', 8839, '1991-06-09', 2450.00, NULL, 10);
+INSERT INTO Employee VALUES(8886, 'ANOOP', 'CLERK', 8888, '1993-01-12', 1100.00, NULL, 20);
+INSERT INTO Employee VALUES(8888, 'SCOTT', 'ANALYST', 8566, '1992-12-09', 3000.00, NULL, 20);
+
+INSERT INTO Employee VALUES(8900, 'JATIN', 'CLERK', 8698, '1991-12-03', 950.00, NULL, 30);
+INSERT INTO Employee VALUES(8902, 'FAKIR', 'ANALYST', 8566, '1991-12-03', 3000.00, NULL, 20);
+INSERT INTO Employee VALUES(8934, 'MITA', 'CLERK', 8882, '1992-01-23', 1300.00, NULL, 10);
+
+
+1. Write a query to display the work location of anoop:
+
+SELECT ename, loc FROM Employee, Department WHERE Employee.deptno = Department.deptno AND Employee.ename = 'ANOOP';
+
+OUTPUT:
++-------+---------+
+| ename | loc     |
++-------+---------+
+| ANOOP | CHENNAI |
++-------+---------+
+
+Traditional way of joining tables:
+
+1. Cartesian Product:
+
+SELECT * FROM Employee, Department;
+
+It will display 14*6 = 84 rows
+
+OUTPUT:
+
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+| empno | ename     | job       | mgr  | hiredate   | sal     | comm    | deptno | deptno | dname      | loc       |
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     50 | MARKETING  | BANGALORE |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     30 | SALES      | KOLKATA   |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     60 | PRODUCTION | AHMEDABAD |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     50 | MARKETING  | BANGALORE |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     40 | OPERATIONS | MUMBAI    |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     30 | SALES      | KOLKATA   |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     20 | RESEARCH   | CHENNAI   |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     60 | PRODUCTION | AHMEDABAD |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     50 | MARKETING  | BANGALORE |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     40 | OPERATIONS | MUMBAI    |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     30 | SALES      | KOLKATA   |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     20 | RESEARCH   | CHENNAI   |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     50 | MARKETING  | BANGALORE |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     30 | SALES      | KOLKATA   |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     60 | PRODUCTION | AHMEDABAD |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     50 | MARKETING  | BANGALORE |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     40 | OPERATIONS | MUMBAI    |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     30 | SALES      | KOLKATA   |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     20 | RESEARCH   | CHENNAI   |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+
+2. Equijoin - When columns are compared for equality:
+
+SELECT * FROM Employee, Department WHERE Employee.deptno = Department.deptno;
+
+OUTPUT: 
+
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+| empno | ename     | job       | mgr  | hiredate   | sal     | comm    | deptno | deptno | dname      | loc       |
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     30 | SALES      | KOLKATA   |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     30 | SALES      | KOLKATA   |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+
+3. Non Equijoin - When columns are compared for anything except equality:
+
+SELECT * FROM Employee, Department WHERE ename = 'ANOOP';
+
+OUTPUT:
+
++-------+-------+-------+------+------------+---------+------+--------+--------+------------+-----------+
+| empno | ename | job   | mgr  | hiredate   | sal     | comm | deptno | deptno | dname      | loc       |
++-------+-------+-------+------+------------+---------+------+--------+--------+------------+-----------+
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
++-------+-------+-------+------+------------+---------+------+--------+--------+------------+-----------+
+
+4. Natural Join - In which only one of the identical columns is displayed:
+
+SELECT Employee.*, Department.dname, Department.loc FROM Employee, Department WHERE Employee.deptno = Department.deptno;
+
+OUTPUT:
+
++-------+-----------+-----------+------+------------+---------+---------+--------+------------+-----------+
+| empno | ename     | job       | mgr  | hiredate   | sal     | comm    | deptno | dname      | loc       |
++-------+-----------+-----------+------+------------+---------+---------+--------+------------+-----------+
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 | RESEARCH   | CHENNAI   |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 | SALES      | KOLKATA   |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 | SALES      | KOLKATA   |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 | RESEARCH   | CHENNAI   |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 | SALES      | KOLKATA   |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 | SALES      | KOLKATA   |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 | ACCOUNTING | NEW DELHI |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 | SALES      | KOLKATA   |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 | ACCOUNTING | NEW DELHI |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 | RESEARCH   | CHENNAI   |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 | RESEARCH   | CHENNAI   |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 | SALES      | KOLKATA   |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 | RESEARCH   | CHENNAI   |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 | ACCOUNTING | NEW DELHI |
++-------+-----------+-----------+------+------------+---------+---------+--------+------------+-----------+
+
+Modern way:
+
+1. Cross Join - Gives cartesian product of the two tables:
+
+SELECT * FROM Employee CROSS JOIN Department;
+
+OUTPUT:
+
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+| empno | ename     | job       | mgr  | hiredate   | sal     | comm    | deptno | deptno | dname      | loc       |
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     50 | MARKETING  | BANGALORE |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     30 | SALES      | KOLKATA   |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     60 | PRODUCTION | AHMEDABAD |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     50 | MARKETING  | BANGALORE |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     40 | OPERATIONS | MUMBAI    |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     30 | SALES      | KOLKATA   |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     20 | RESEARCH   | CHENNAI   |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     60 | PRODUCTION | AHMEDABAD |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     50 | MARKETING  | BANGALORE |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     40 | OPERATIONS | MUMBAI    |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     30 | SALES      | KOLKATA   |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     20 | RESEARCH   | CHENNAI   |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     50 | MARKETING  | BANGALORE |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     30 | SALES      | KOLKATA   |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     60 | PRODUCTION | AHMEDABAD |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     50 | MARKETING  | BANGALORE |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     40 | OPERATIONS | MUMBAI    |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     30 | SALES      | KOLKATA   |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     20 | RESEARCH   | CHENNAI   |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+84 rows in set (0.01 sec)
+
+mysql> SELECT * FROM Employee, Department WHERE Employee.deptno = Department.deptno;
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+| empno | ename     | job       | mgr  | hiredate   | sal     | comm    | deptno | deptno | dname      | loc       |
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     30 | SALES      | KOLKATA   |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     30 | SALES      | KOLKATA   |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+14 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Employee, Department WHERE ename = 'ANOOP';
++-------+-------+-------+------+------------+---------+------+--------+--------+------------+-----------+
+| empno | ename | job   | mgr  | hiredate   | sal     | comm | deptno | deptno | dname      | loc       |
++-------+-------+-------+------+------------+---------+------+--------+--------+------------+-----------+
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
++-------+-------+-------+------+------------+---------+------+--------+--------+------------+-----------+
+6 rows in set (0.00 sec)
+
+mysql>
+mysql> SELECT * FROM Employee, Department.dname, Department.loc WHERE Employee.deptno = Department.deptno;
+ERROR 1049 (42000): Unknown database 'department'
+mysql> SELECT * FROM Employee, Department.dname, Department.loc WHERE Employee.deptno = Department.deptno;
+ERROR 1049 (42000): Unknown database 'department'
+mysql> use vallabh_company
+Database changed
+mysql> SELECT * FROM Employee, Department.dname, Department.loc WHERE Employee.deptno = Department.deptno;
+ERROR 1049 (42000): Unknown database 'department'
+mysql> SELECT * FROM Employee.*, Department.dname, Department.loc WHERE Employee.deptno = Department.deptno;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*, Department.dname, Department.loc WHERE Employee.deptno = Department.deptno' at line 1
+mysql> SELECT Employee.*, Department.dname, Department.loc FROM Employee, Department WHERE Employee.deptno = Department.deptno;
++-------+-----------+-----------+------+------------+---------+---------+--------+------------+-----------+
+| empno | ename     | job       | mgr  | hiredate   | sal     | comm    | deptno | dname      | loc       |
++-------+-----------+-----------+------+------------+---------+---------+--------+------------+-----------+
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 | RESEARCH   | CHENNAI   |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 | SALES      | KOLKATA   |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 | SALES      | KOLKATA   |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 | RESEARCH   | CHENNAI   |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 | SALES      | KOLKATA   |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 | SALES      | KOLKATA   |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 | ACCOUNTING | NEW DELHI |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 | SALES      | KOLKATA   |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 | ACCOUNTING | NEW DELHI |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 | RESEARCH   | CHENNAI   |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 | RESEARCH   | CHENNAI   |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 | SALES      | KOLKATA   |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 | RESEARCH   | CHENNAI   |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 | ACCOUNTING | NEW DELHI |
++-------+-----------+-----------+------+------------+---------+---------+--------+------------+-----------+
+14 rows in set (0.00 sec)
+
+mysql> SELECT * FROM, Employee CROSS JOIN Department;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', Employee CROSS JOIN Department' at line 1
+mysql> SELECT * FROM Employee CROSS JOIN Department;
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+| empno | ename     | job       | mgr  | hiredate   | sal     | comm    | deptno | deptno | dname      | loc       |
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     50 | MARKETING  | BANGALORE |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     30 | SALES      | KOLKATA   |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     60 | PRODUCTION | AHMEDABAD |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     50 | MARKETING  | BANGALORE |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     40 | OPERATIONS | MUMBAI    |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     30 | SALES      | KOLKATA   |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     20 | RESEARCH   | CHENNAI   |
+|  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     50 | MARKETING  | BANGALORE |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     30 | SALES      | KOLKATA   |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     60 | PRODUCTION | AHMEDABAD |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     50 | MARKETING  | BANGALORE |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     40 | OPERATIONS | MUMBAI    |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     30 | SALES      | KOLKATA   |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     20 | RESEARCH   | CHENNAI   |
+|  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     60 | PRODUCTION | AHMEDABAD |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     50 | MARKETING  | BANGALORE |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     40 | OPERATIONS | MUMBAI    |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     30 | SALES      | KOLKATA   |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     20 | RESEARCH   | CHENNAI   |
+|  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL |     30 |     10 | ACCOUNTING | NEW DELHI |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     60 | PRODUCTION | AHMEDABAD |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     50 | MARKETING  | BANGALORE |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     40 | OPERATIONS | MUMBAI    |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     30 | SALES      | KOLKATA   |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     20 | RESEARCH   | CHENNAI   |
+|  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL |     20 |     10 | ACCOUNTING | NEW DELHI |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     60 | PRODUCTION | AHMEDABAD |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     50 | MARKETING  | BANGALORE |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     40 | OPERATIONS | MUMBAI    |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     30 | SALES      | KOLKATA   |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     20 | RESEARCH   | CHENNAI   |
+|  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL |     10 |     10 | ACCOUNTING | NEW DELHI |
++-------+-----------+-----------+------+------------+---------+---------+--------+--------+------------+-----------+
+
+2. Natural Join - Common column is at the beginning:
+
+SELECT * FROM Employee NATURAL JOIN Department;
+
+OUTPUT:
+
++--------+-------+-----------+-----------+------+------------+---------+---------+------------+-----------+
+| deptno | empno | ename     | job       | mgr  | hiredate   | sal     | comm    | dname      | loc       |
++--------+-------+-----------+-----------+------+------------+---------+---------+------------+-----------+
+|     20 |  8369 | SMITH     | CLERK     | 8902 | 1990-12-18 |  800.00 |    NULL | RESEARCH   | CHENNAI   |
+|     30 |  8499 | ANYA      | SALESMAN  | 8698 | 1991-02-20 | 1600.00 |  300.00 | SALES      | KOLKATA   |
+|     30 |  8521 | SETH      | SALESMAN  | 8698 | 1991-02-22 | 1250.00 |  500.00 | SALES      | KOLKATA   |
+|     20 |  8566 | MAHADEVAN | MANAGER   | 8839 | 1991-04-02 | 2985.00 |    NULL | RESEARCH   | CHENNAI   |
+|     30 |  8654 | MUMIN     | MANAGER   | 8698 | 1991-09-28 | 1250.00 | 1400.00 | SALES      | KOLKATA   |
+|     30 |  8698 | BINA      | MANAGER   | 8839 | 1991-05-01 | 2850.00 |    NULL | SALES      | KOLKATA   |
+|     10 |  8839 | AMIR      | PRESIDENT | NULL | 1991-11-18 | 5000.00 |    NULL | ACCOUNTING | NEW DELHI |
+|     30 |  8844 | KULDEEP   | SALESMAN  | 8698 | 1991-09-08 | 1500.00 |    0.00 | SALES      | KOLKATA   |
+|     10 |  8882 | SHAIVNSH  | MANAGER   | 8839 | 1991-06-09 | 2450.00 |    NULL | ACCOUNTING | NEW DELHI |
+|     20 |  8886 | ANOOP     | CLERK     | 8888 | 1993-01-12 | 1100.00 |    NULL | RESEARCH   | CHENNAI   |
+|     20 |  8888 | SCOTT     | ANALYST   | 8566 | 1992-12-09 | 3000.00 |    NULL | RESEARCH   | CHENNAI   |
+|     30 |  8900 | JATIN     | CLERK     | 8698 | 1991-12-03 |  950.00 |    NULL | SALES      | KOLKATA   |
+|     20 |  8902 | FAKIR     | ANALYST   | 8566 | 1991-12-03 | 3000.00 |    NULL | RESEARCH   | CHENNAI   |
+|     10 |  8934 | MITA      | CLERK     | 8882 | 1992-01-23 | 1300.00 |    NULL | ACCOUNTING | NEW DELHI |
++--------+-------+-----------+-----------+------+------------+---------+---------+------------+-----------+
+
+Write a query to display managers working in research department:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'MANAGER' AND d.dname = 'RESEARCH';
+
+OUTPUT:
+
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+| deptno | empno | ename     | job     | mgr  | hiredate   | sal     | comm | dname    | loc     |
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+|     20 |  8566 | MAHADEVAN | MANAGER | 8839 | 1991-04-02 | 2985.00 | NULL | RESEARCH | CHENNAI |
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+
+
+1. Write a query to display the details of employees working in Chennai
+
+SELECT * FROM Employee NATURAL JOIN Department WHERE loc = 'CHENNAI';
+
+OUTPUT:
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+| deptno | empno | ename     | job     | mgr  | hiredate   | sal     | comm | dname    | loc     |
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+|     20 |  8369 | SMITH     | CLERK   | 8902 | 1990-12-18 |  800.00 | NULL | RESEARCH | CHENNAI |
+|     20 |  8566 | MAHADEVAN | MANAGER | 8839 | 1991-04-02 | 2985.00 | NULL | RESEARCH | CHENNAI |
+|     20 |  8886 | ANOOP     | CLERK   | 8888 | 1993-01-12 | 1100.00 | NULL | RESEARCH | CHENNAI |
+|     20 |  8888 | SCOTT     | ANALYST | 8566 | 1992-12-09 | 3000.00 | NULL | RESEARCH | CHENNAI |
+|     20 |  8902 | FAKIR     | ANALYST | 8566 | 1991-12-03 | 3000.00 | NULL | RESEARCH | CHENNAI |
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+
+2. Write a query to display the managers working in RESEARCH department:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'MANAGER' AND d.dname = 'RESEARCH';
+
+OUTPUT:
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+| deptno | empno | ename     | job     | mgr  | hiredate   | sal     | comm | dname    | loc     |
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+|     20 |  8566 | MAHADEVAN | MANAGER | 8839 | 1991-04-02 | 2985.00 | NULL | RESEARCH | CHENNAI |
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+
+3. Write a query to display the CLERKS working in CHENNAI:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'CLERK' AND d.loc = 'CHENNAI';
+
+OUTPUT:
++--------+-------+-------+-------+------+------------+---------+------+----------+---------+
+| deptno | empno | ename | job   | mgr  | hiredate   | sal     | comm | dname    | loc     |
++--------+-------+-------+-------+------+------------+---------+------+----------+---------+
+|     20 |  8369 | SMITH | CLERK | 8902 | 1990-12-18 |  800.00 | NULL | RESEARCH | CHENNAI |
+|     20 |  8886 | ANOOP | CLERK | 8888 | 1993-01-12 | 1100.00 | NULL | RESEARCH | CHENNAI |
++--------+-------+-------+-------+------+------------+---------+------+----------+---------+
+
+4. Write a query to display the CLERKS working in NEW DELHI:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'CLERK' AND d.loc = 'NEW DELHI';
+
+OUTPUT:
++--------+-------+-------+-------+------+------------+---------+------+------------+-----------+
+| deptno | empno | ename | job   | mgr  | hiredate   | sal     | comm | dname      | loc       |
++--------+-------+-------+-------+------+------------+---------+------+------------+-----------+
+|     10 |  8934 | MITA  | CLERK | 8882 | 1992-01-23 | 1300.00 | NULL | ACCOUNTING | NEW DELHI |
++--------+-------+-------+-------+------+------------+---------+------+------------+-----------+
+
+5. Write a query to display the CLERKS working in KOLKATA:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'CLERK' AND d.loc = 'KOLKATA';
+
+OUTPUT:
++--------+-------+-------+-------+------+------------+--------+------+-------+---------+
+| deptno | empno | ename | job   | mgr  | hiredate   | sal    | comm | dname | loc     |
++--------+-------+-------+-------+------+------------+--------+------+-------+---------+
+|     30 |  8900 | JATIN | CLERK | 8698 | 1991-12-03 | 950.00 | NULL | SALES | KOLKATA |
++--------+-------+-------+-------+------+------------+--------+------+-------+---------+
+
+6. Write a query to display the MANAGERS working in CHENNAI:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'MANAGER' AND d.loc = 'CHENNAI';
+
+OUTPUT:
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+| deptno | empno | ename     | job     | mgr  | hiredate   | sal     | comm | dname    | loc     |
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+|     20 |  8566 | MAHADEVAN | MANAGER | 8839 | 1991-04-02 | 2985.00 | NULL | RESEARCH | CHENNAI |
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+
+7. Write a query to display the MANAGERS working in KOLKATA:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'MANAGER' AND d.loc = 'KOLKATA';
+
+OUTPUT:
++--------+-------+-------+---------+------+------------+---------+---------+-------+---------+
+| deptno | empno | ename | job     | mgr  | hiredate   | sal     | comm    | dname | loc     |
++--------+-------+-------+---------+------+------------+---------+---------+-------+---------+
+|     30 |  8654 | MUMIN | MANAGER | 8698 | 1991-09-28 | 1250.00 | 1400.00 | SALES | KOLKATA |
+|     30 |  8698 | BINA  | MANAGER | 8839 | 1991-05-01 | 2850.00 |    NULL | SALES | KOLKATA |
++--------+-------+-------+---------+------+------------+---------+---------+-------+---------+
+
+8. Write a query to display the ANALYSTs working in RESEARCH department:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'ANALYST' AND d.dname = 'RESEARCH';
+
+OUTPUT:
++--------+-------+-------+---------+------+------------+---------+------+----------+---------+
+| deptno | empno | ename | job     | mgr  | hiredate   | sal     | comm | dname    | loc     |
++--------+-------+-------+---------+------+------------+---------+------+----------+---------+
+|     20 |  8888 | SCOTT | ANALYST | 8566 | 1992-12-09 | 3000.00 | NULL | RESEARCH | CHENNAI |
+|     20 |  8902 | FAKIR | ANALYST | 8566 | 1991-12-03 | 3000.00 | NULL | RESEARCH | CHENNAI |
++--------+-------+-------+---------+------+------------+---------+------+----------+---------+
+
+9. Write a query to display the ANALYSTs working in ACCOUNTING department:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'ANALYST' AND d.dname = 'ACCOUNTING';
+
+OUTPUT:
+Empty set
+
+10. Write a query to display the ANALYSTs working in SALES department:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'ANALYST' AND d.dname = 'SALES';
+
+OUTPUT:
+Empty set
+
+11. Write a query to display the ANALYSTs working in OPERATIONS department:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'ANALYST' AND d.dname = 'OPERATIONS';
+
+OUTPUT:
+Empty set
+
+12. Write a query to display the ANALYSTs working in MARKETING department:
+
+SELECT * FROM Employee AS e NATURAL JOIN Department AS d WHERE e.job = 'ANALYST' AND d.dname = 'MARKETING';
+
+OUTPUT:
+Empty set
+
+13. Write a query to display the details of all employees working in KOLKATA:
+
+SELECT * FROM Employee NATURAL JOIN Department WHERE loc = 'KOLKATA';
+
+OUTPUT:
++--------+-------+---------+----------+------+------------+---------+---------+-------+---------+
+| deptno | empno | ename   | job      | mgr  | hiredate   | sal     | comm    | dname | loc     |
++--------+-------+---------+----------+------+------------+---------+---------+-------+---------+
+|     30 |  8499 | ANYA    | SALESMAN | 8698 | 1991-02-20 | 1600.00 |  300.00 | SALES | KOLKATA |
+|     30 |  8521 | SETH    | SALESMAN | 8698 | 1991-02-22 | 1250.00 |  500.00 | SALES | KOLKATA |
+|     30 |  8654 | MUMIN   | MANAGER  | 8698 | 1991-09-28 | 1250.00 | 1400.00 | SALES | KOLKATA |
+|     30 |  8698 | BINA    | MANAGER  | 8839 | 1991-05-01 | 2850.00 |    NULL | SALES | KOLKATA |
+|     30 |  8844 | KULDEEP | SALESMAN | 8698 | 1991-09-08 | 1500.00 |    0.00 | SALES | KOLKATA |
+|     30 |  8900 | JATIN   | CLERK    | 8698 | 1991-12-03 |  950.00 |    NULL | SALES | KOLKATA |
++--------+-------+---------+----------+------+------------+---------+---------+-------+---------+
+
+14. Write a query to display the details of all employees working in CHENNAI:
+
+SELECT * FROM Employee NATURAL JOIN Department WHERE loc = 'CHENNAI';
+
+OUTPUT:
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+| deptno | empno | ename     | job     | mgr  | hiredate   | sal     | comm | dname    | loc     |
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+|     20 |  8369 | SMITH     | CLERK   | 8902 | 1990-12-18 |  800.00 | NULL | RESEARCH | CHENNAI |
+|     20 |  8566 | MAHADEVAN | MANAGER | 8839 | 1991-04-02 | 2985.00 | NULL | RESEARCH | CHENNAI |
+|     20 |  8886 | ANOOP     | CLERK   | 8888 | 1993-01-12 | 1100.00 | NULL | RESEARCH | CHENNAI |
+|     20 |  8888 | SCOTT     | ANALYST | 8566 | 1992-12-09 | 3000.00 | NULL | RESEARCH | CHENNAI |
+|     20 |  8902 | FAKIR     | ANALYST | 8566 | 1991-12-03 | 3000.00 | NULL | RESEARCH | CHENNAI |
++--------+-------+-----------+---------+------+------------+---------+------+----------+---------+
+
+15. Write a query to display the details of all employees working in BANGALORE:
+
+SELECT * FROM Employee NATURAL JOIN Department WHERE loc = 'BANGALORE';
+
+OUTPUT:
+Empty set
+
+16. Write a query to display the details of all employees working in AHMEDABAD:
+
+SELECT * FROM Employee NATURAL JOIN Department WHERE loc = 'AHMEDABAD';
+
+OUTPUT:
+Empty set
+
+17. Write a query to display the details of all employees working in MUMBAI:
+
+SELECT * FROM Employee NATURAL JOIN Department WHERE loc = 'MUMBAI';
+
+OUTPUT:
+Empty set
+
+18. Write a query to display the SALESMAN working in KOLKATA:
+
+SELECT * FROM Employee NATURAL JOIN Department WHERE job = 'SALESMAN' AND loc = 'KOLKATA';
+
+OUTPUT:
++--------+-------+---------+----------+------+------------+---------+--------+-------+---------+
+| deptno | empno | ename   | job      | mgr  | hiredate   | sal     | comm   | dname | loc     |
++--------+-------+---------+----------+------+------------+---------+--------+-------+---------+
+|     30 |  8499 | ANYA    | SALESMAN | 8698 | 1991-02-20 | 1600.00 | 300.00 | SALES | KOLKATA |
+|     30 |  8521 | SETH    | SALESMAN | 8698 | 1991-02-22 | 1250.00 | 500.00 | SALES | KOLKATA |
+|     30 |  8844 | KULDEEP | SALESMAN | 8698 | 1991-09-08 | 1500.00 |   0.00 | SALES | KOLKATA |
++--------+-------+---------+----------+------+------------+---------+--------+-------+---------+
+
+19. Write a query to display the SALESMAN working in CHENNAI:
+
+SELECT * FROM Employee NATURAL JOIN Department WHERE job = 'SALESMAN' AND loc = 'CHENNAI';
+
+OUTPUT:
+Empty set
+
+20. Write a query to display the SALESMAN working in BANGALORE:
+
+SELECT * FROM Employee NATURAL JOIN Department WHERE job = 'SALESMAN' AND loc = 'BANGALORE';
+
+OUTPUT:
+Empty set
+
+21. Write a query to display the SALESMAN working in AHMEDABAD:
+
+SELECT * FROM Employee NATURAL JOIN Department WHERE job = 'SALESMAN' AND loc = 'AHMEDABAD';
+
+OUTPUT:
+Empty set
+
+22. Write a query to display the SALESMAN working in MUMBAI:
+
+SELECT * FROM Employee NATURAL JOIN Department WHERE job = 'SALESMAN' AND loc = 'MUMBAI';
+
+OUTPUT:
+Empty set

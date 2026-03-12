@@ -1,0 +1,276 @@
+CREATE DATABASE g71s8;
+
+USE g71s8;
+
+CREATE TABLE employees
+(
+    employee_no INTEGER PRIMARY KEY,
+    employee_name  VARCHAR(30) NOT NULL,
+    job char(9) CHECK(job IN('CLERK', 'SALESMAN', 'MANAGER', 'PRESIDENT', 'ANALYST')),
+    manager INTEGER,
+    hiredate char(10),
+    salary INTEGER,
+    comm INTEGER,
+    department_no INTEGER
+);
+
+DESC employees;
+
+1. Entering the values into the table:
+
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, department_no)
+VALUES(8369, 'SMITH', 'CLERK', 8902, '1990-12-18', 800, 20);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, comm, department_no)
+VALUES(8499, 'ANYA', 'SALESMAN', 8698, '1991-02-20', 1600, 300, 30);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, comm, department_no)
+VALUES(8521, 'SETH', 'SALESMAN', 8698, '1991-02-22', 1250, 500, 30);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, department_no)
+VALUES(8566, 'MAHADEVAN', 'MANAGER', 8839, '1991-04-02', 2985.00, 20);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, comm, department_no)
+VALUES(8654, 'MOMIN', 'SALESMAN', 8698, '1991-09-28', 1250, 1400, 30);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, department_no)
+VALUES(8698, 'BINA', 'MANAGER', 8839, '1991-05-01', 2850, 30);
+INSERT INTO employees(employee_no, employee_name, job, hiredate, salary, department_no)
+VALUES(8839, 'AMIR', 'PRESIDENT', '1991-11-18', 5000, 10);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, comm, department_no)
+VALUES(8844, 'KULDEEP', 'SALESMAN', 8698, '1991-09-08', 1500, 0, 30);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, department_no)
+VALUES(8882, 'SHIVANSH', 'MANAGER', 8839, '1991-06-09', 2450, 10);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, department_no)
+VALUES(8886, 'ANOOP', 'CLERK', 8888, '1993-01-12', 1100, 20);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, department_no)
+VALUES(8888, 'SCOTT', 'ANALYST', 8566, '1992-12-09', 3000, 20);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, department_no)
+VALUES(8900, 'JATIN', 'CLERK', 8698, '1991-12-03', 950, 30);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, department_no)
+VALUES(8902, 'FAKIR', 'ANALYST', 8566, '1991-12-03', 3000, 20);
+INSERT INTO employees(employee_no, employee_name, job, manager, hiredate, salary, department_no)
+VALUES(8934, 'MITA', 'CLERK', 8882, '1992-01-23', 1300, 10);
+
+SELECT * FROM employees;
+
+OUTPUT:
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+| employee_no | employee_name | job       | manager | hiredate   | salary | comm | department_no |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+|        8369 | SMITH         | CLERK     |    8902 | 1990-12-18 |    800 | NULL |            20 |
+|        8499 | ANYA          | SALESMAN  |    8698 | 1991-02-20 |   1600 |  300 |            30 |
+|        8521 | SETH          | SALESMAN  |    8698 | 1991-02-22 |   1250 |  500 |            30 |
+|        8566 | MAHADEVAN     | MANAGER   |    8839 | 1991-04-02 |   2985 | NULL |            20 |
+|        8654 | MOMIN         | SALESMAN  |    8698 | 1991-09-28 |   1250 | 1400 |            30 |
+|        8698 | BINA          | MANAGER   |    8839 | 1991-05-01 |   2850 | NULL |            30 |
+|        8839 | AMIR          | PRESIDENT |    NULL | 1991-11-18 |   5000 | NULL |            10 |
+|        8844 | KULDEEP       | SALESMAN  |    8698 | 1991-09-08 |   1500 |    0 |            30 |
+|        8882 | SHIVANSH      | MANAGER   |    8839 | 1991-06-09 |   2450 | NULL |            10 |
+|        8886 | ANOOP         | CLERK     |    8888 | 1993-01-12 |   1100 | NULL |            20 |
+|        8888 | SCOTT         | ANALYST   |    8566 | 1992-12-09 |   3000 | NULL |            20 |
+|        8900 | JATIN         | CLERK     |    8698 | 1991-12-03 |    950 | NULL |            30 |
+|        8902 | FAKIR         | ANALYST   |    8566 | 1991-12-03 |   3000 | NULL |            20 |
+|        8934 | MITA          | CLERK     |    8882 | 1992-01-23 |   1300 | NULL |            10 |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+
+2.a - Display the employees in ascending order of their names
+
+SELECT * FROM employees ORDER BY employee_name ASC;
+
+OUTPUT:
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+| employee_no | employee_name | job       | manager | hiredate   | salary | comm | department_no |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+|        8839 | AMIR          | PRESIDENT |    NULL | 1991-11-18 |   5000 | NULL |            10 |
+|        8886 | ANOOP         | CLERK     |    8888 | 1993-01-12 |   1100 | NULL |            20 |
+|        8499 | ANYA          | SALESMAN  |    8698 | 1991-02-20 |   1600 |  300 |            30 |
+|        8698 | BINA          | MANAGER   |    8839 | 1991-05-01 |   2850 | NULL |            30 |
+|        8902 | FAKIR         | ANALYST   |    8566 | 1991-12-03 |   3000 | NULL |            20 |
+|        8900 | JATIN         | CLERK     |    8698 | 1991-12-03 |    950 | NULL |            30 |
+|        8844 | KULDEEP       | SALESMAN  |    8698 | 1991-09-08 |   1500 |    0 |            30 |
+|        8566 | MAHADEVAN     | MANAGER   |    8839 | 1991-04-02 |   2985 | NULL |            20 |
+|        8934 | MITA          | CLERK     |    8882 | 1992-01-23 |   1300 | NULL |            10 |
+|        8654 | MOMIN         | SALESMAN  |    8698 | 1991-09-28 |   1250 | 1400 |            30 |
+|        8888 | SCOTT         | ANALYST   |    8566 | 1992-12-09 |   3000 | NULL |            20 |
+|        8521 | SETH          | SALESMAN  |    8698 | 1991-02-22 |   1250 |  500 |            30 |
+|        8882 | SHIVANSH      | MANAGER   |    8839 | 1991-06-09 |   2450 | NULL |            10 |
+|        8369 | SMITH         | CLERK     |    8902 | 1990-12-18 |    800 | NULL |            20 |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+
+2.b - Display the employees in descending order of their names:
+
+SELECT * FROM employees ORDER BY employee_name DESC;
+
+OUTPUT:
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+| employee_no | employee_name | job       | manager | hiredate   | salary | comm | department_no |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+|        8369 | SMITH         | CLERK     |    8902 | 1990-12-18 |    800 | NULL |            20 |
+|        8882 | SHIVANSH      | MANAGER   |    8839 | 1991-06-09 |   2450 | NULL |            10 |
+|        8521 | SETH          | SALESMAN  |    8698 | 1991-02-22 |   1250 |  500 |            30 |
+|        8888 | SCOTT         | ANALYST   |    8566 | 1992-12-09 |   3000 | NULL |            20 |
+|        8654 | MOMIN         | SALESMAN  |    8698 | 1991-09-28 |   1250 | 1400 |            30 |
+|        8934 | MITA          | CLERK     |    8882 | 1992-01-23 |   1300 | NULL |            10 |
+|        8566 | MAHADEVAN     | MANAGER   |    8839 | 1991-04-02 |   2985 | NULL |            20 |
+|        8844 | KULDEEP       | SALESMAN  |    8698 | 1991-09-08 |   1500 |    0 |            30 |
+|        8900 | JATIN         | CLERK     |    8698 | 1991-12-03 |    950 | NULL |            30 |
+|        8902 | FAKIR         | ANALYST   |    8566 | 1991-12-03 |   3000 | NULL |            20 |
+|        8698 | BINA          | MANAGER   |    8839 | 1991-05-01 |   2850 | NULL |            30 |
+|        8499 | ANYA          | SALESMAN  |    8698 | 1991-02-20 |   1600 |  300 |            30 |
+|        8886 | ANOOP         | CLERK     |    8888 | 1993-01-12 |   1100 | NULL |            20 |
+|        8839 | AMIR          | PRESIDENT |    NULL | 1991-11-18 |   5000 | NULL |            10 |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+
+2.c - Display the empno, empname and sal of employees in ascending order of their salaries:
+
+SELECT employee_no, employee_name, salary FROM employees ORDER BY salary ASC;
+
+OUTPUT:
++-------------+---------------+--------+
+| employee_no | employee_name | salary |
++-------------+---------------+--------+
+|        8369 | SMITH         |    800 |
+|        8900 | JATIN         |    950 |
+|        8886 | ANOOP         |   1100 |
+|        8521 | SETH          |   1250 |
+|        8654 | MOMIN         |   1250 |
+|        8934 | MITA          |   1300 |
+|        8844 | KULDEEP       |   1500 |
+|        8499 | ANYA          |   1600 |
+|        8882 | SHIVANSH      |   2450 |
+|        8698 | BINA          |   2850 |
+|        8566 | MAHADEVAN     |   2985 |
+|        8888 | SCOTT         |   3000 |
+|        8902 | FAKIR         |   3000 |
+|        8839 | AMIR          |   5000 |
++-------------+---------------+--------+
+
+2.d - Display the empno, empname and sal of employees in descending order of their salaries:
+
+SELECT employee_no, employee_name, salary FROM employees ORDER BY salary DESC;
+
+OUTPUT:
++-------------+---------------+--------+
+| employee_no | employee_name | salary |
++-------------+---------------+--------+
+|        8839 | AMIR          |   5000 |
+|        8888 | SCOTT         |   3000 |
+|        8902 | FAKIR         |   3000 |
+|        8566 | MAHADEVAN     |   2985 |
+|        8698 | BINA          |   2850 |
+|        8882 | SHIVANSH      |   2450 |
+|        8499 | ANYA          |   1600 |
+|        8844 | KULDEEP       |   1500 |
+|        8934 | MITA          |   1300 |
+|        8521 | SETH          |   1250 |
+|        8654 | MOMIN         |   1250 |
+|        8886 | ANOOP         |   1100 |
+|        8900 | JATIN         |    950 |
+|        8369 | SMITH         |    800 |
++-------------+---------------+--------+
+
+2.e - Display the employees who belong to deptno 20:
+
+SELECT * FROM employees WHERE department_no = 20;
+
+OUTPUT:
++-------------+---------------+---------+---------+------------+--------+------+---------------+
+| employee_no | employee_name | job     | manager | hiredate   | salary | comm | department_no |
++-------------+---------------+---------+---------+------------+--------+------+---------------+
+|        8369 | SMITH         | CLERK   |    8902 | 1990-12-18 |    800 | NULL |            20 |
+|        8566 | MAHADEVAN     | MANAGER |    8839 | 1991-04-02 |   2985 | NULL |            20 |
+|        8886 | ANOOP         | CLERK   |    8888 | 1993-01-12 |   1100 | NULL |            20 |
+|        8888 | SCOTT         | ANALYST |    8566 | 1992-12-09 |   3000 | NULL |            20 |
+|        8902 | FAKIR         | ANALYST |    8566 | 1991-12-03 |   3000 | NULL |            20 |
++-------------+---------------+---------+---------+------------+--------+------+---------------+
+
+2.f - Display the employees who work for the manager with mgr number as 8698:
+
+SELECT * FROM employees WHERE manager = 8698;
+
+OUTPUT:
++-------------+---------------+----------+---------+------------+--------+------+---------------+
+| employee_no | employee_name | job      | manager | hiredate   | salary | comm | department_no |
++-------------+---------------+----------+---------+------------+--------+------+---------------+
+|        8499 | ANYA          | SALESMAN |    8698 | 1991-02-20 |   1600 |  300 |            30 |
+|        8521 | SETH          | SALESMAN |    8698 | 1991-02-22 |   1250 |  500 |            30 |
+|        8654 | MOMIN         | SALESMAN |    8698 | 1991-09-28 |   1250 | 1400 |            30 |
+|        8844 | KULDEEP       | SALESMAN |    8698 | 1991-09-08 |   1500 |    0 |            30 |
+|        8900 | JATIN         | CLERK    |    8698 | 1991-12-03 |    950 | NULL |            30 |
++-------------+---------------+----------+---------+------------+--------+------+---------------+
+
+2.g - Display the employees whose salaries are more than 2000:
+
+SELECT * FROM employees WHERE salary > 2000;
+
+OUTPUT:
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+| employee_no | employee_name | job       | manager | hiredate   | salary | comm | department_no |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+|        8566 | MAHADEVAN     | MANAGER   |    8839 | 1991-04-02 |   2985 | NULL |            20 |
+|        8698 | BINA          | MANAGER   |    8839 | 1991-05-01 |   2850 | NULL |            30 |
+|        8839 | AMIR          | PRESIDENT |    NULL | 1991-11-18 |   5000 | NULL |            10 |
+|        8882 | SHIVANSH      | MANAGER   |    8839 | 1991-06-09 |   2450 | NULL |            10 |
+|        8888 | SCOTT         | ANALYST   |    8566 | 1992-12-09 |   3000 | NULL |            20 |
+|        8902 | FAKIR         | ANALYST   |    8566 | 1991-12-03 |   3000 | NULL |            20 |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+
+2.h - Display the employees who does not have a manager assigned:
+
+SELECT * FROM employees WHERE manager IS NULL;
+
+OUTPUT:
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+| employee_no | employee_name | job       | manager | hiredate   | salary | comm | department_no |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+|        8839 | AMIR          | PRESIDENT |    NULL | 1991-11-18 |   5000 | NULL |            10 |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+
+2.i - Display the employees who are CLERKS:
+
+SELECT * FROM employees WHERE job = 'CLERK';
+
+OUTPUT:
++-------------+---------------+-------+---------+------------+--------+------+---------------+
+| employee_no | employee_name | job   | manager | hiredate   | salary | comm | department_no |
++-------------+---------------+-------+---------+------------+--------+------+---------------+
+|        8369 | SMITH         | CLERK |    8902 | 1990-12-18 |    800 | NULL |            20 |
+|        8886 | ANOOP         | CLERK |    8888 | 1993-01-12 |   1100 | NULL |            20 |
+|        8900 | JATIN         | CLERK |    8698 | 1991-12-03 |    950 | NULL |            30 |
+|        8934 | MITA          | CLERK |    8882 | 1992-01-23 |   1300 | NULL |            10 |
++-------------+---------------+-------+---------+------------+--------+------+---------------+
+
+2.j - Display the employees who are SALESMAN:
+
+SELECT * FROM employees WHERE job = 'SALESMAN';
+
+OUTPUT:
++-------------+---------------+----------+---------+------------+--------+------+---------------+
+| employee_no | employee_name | job      | manager | hiredate   | salary | comm | department_no |
++-------------+---------------+----------+---------+------------+--------+------+---------------+
+|        8499 | ANYA          | SALESMAN |    8698 | 1991-02-20 |   1600 |  300 |            30 |
+|        8521 | SETH          | SALESMAN |    8698 | 1991-02-22 |   1250 |  500 |            30 |
+|        8654 | MOMIN         | SALESMAN |    8698 | 1991-09-28 |   1250 | 1400 |            30 |
+|        8844 | KULDEEP       | SALESMAN |    8698 | 1991-09-08 |   1500 |    0 |            30 |
++-------------+---------------+----------+---------+------------+--------+------+---------------+
+
+2.k - Display the employees who are SALESMAN whose salary is greater than 1500.00:
+
+SELECT * FROM employees WHERE job = 'SALESMAN' AND salary > 1500;
+
+OUTPUT:
++-------------+---------------+----------+---------+------------+--------+------+---------------+
+| employee_no | employee_name | job      | manager | hiredate   | salary | comm | department_no |
++-------------+---------------+----------+---------+------------+--------+------+---------------+
+|        8499 | ANYA          | SALESMAN |    8698 | 1991-02-20 |   1600 |  300 |            30 |
++-------------+---------------+----------+---------+------------+--------+------+---------------+
+
+2.l - Display the employees whose name starts with a letter A:
+
+SELECT * FROM employees where employee_name LIKE 'A%';
+
+OUTPUT:
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+| employee_no | employee_name | job       | manager | hiredate   | salary | comm | department_no |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+|        8499 | ANYA          | SALESMAN  |    8698 | 1991-02-20 |   1600 |  300 |            30 |
+|        8839 | AMIR          | PRESIDENT |    NULL | 1991-11-18 |   5000 | NULL |            10 |
+|        8886 | ANOOP         | CLERK     |    8888 | 1993-01-12 |   1100 | NULL |            20 |
++-------------+---------------+-----------+---------+------------+--------+------+---------------+
+

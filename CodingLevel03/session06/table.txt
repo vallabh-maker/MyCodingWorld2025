@@ -1,0 +1,112 @@
+USE DATABASE school;
+
+USE TABLE marksheet;
+
+1. Query to display the student details in ascending order of the section and descending order of marks.
+
+SELECT * FROM marksheet ORDER BY section ASC, marks DESC;
+
+OUTPUT:
+
++--------+---------+-------+-------+---------+
+| rollno | name    | marks | grade | section |
++--------+---------+-------+-------+---------+
+|    101 | Ruhani  | 76.80 | A     | A       |
+|    102 | George  | 71.20 | B     | A       |
+|    115 | Neha    | 32.00 | F     | A       |
+|    108 | Meera   | 97.20 | A+    | B       |
+|    112 | Gurnoor | 93.50 | A+    | B       |
+|    107 | Arsiya  | 91.20 | A+    | B       |
+|    103 | Simran  | 81.20 | A     | B       |
+|    113 | Rabiya  | 72.50 | B     | B       |
+|    109 | Amaal   | 57.20 | C     | B       |
+|    106 | Raunaq  | 32.50 | F     | B       |
+|    111 | Adam    | 74.20 | B     | C       |
+|    110 | Simran  | 66.00 | B     | C       |
+|    104 | Ali     | 61.20 | B     | C       |
+|    105 | Kushal  | 51.60 | C     | C       |
+|    114 | Rahil   | 32.00 | F     | C       |
++--------+---------+-------+-------+---------+
+
+2. Write a query to display the details of students in the order of their grades(A+, A, B, C, F).
+
+SELECT * FROM marksheet ORDER BY FIELD(grade, 'A+', 'A', 'B', 'C', 'F');
+
+OUTPUT:
++--------+---------+-------+-------+---------+
+| rollno | name    | marks | grade | section |
++--------+---------+-------+-------+---------+
+|    107 | Arsiya  | 91.20 | A+    | B       |
+|    108 | Meera   | 97.20 | A+    | B       |
+|    112 | Gurnoor | 93.50 | A+    | B       |
+|    101 | Ruhani  | 76.80 | A     | A       |
+|    103 | Simran  | 81.20 | A     | B       |
+|    102 | George  | 71.20 | B     | A       |
+|    104 | Ali     | 61.20 | B     | C       |
+|    110 | Simran  | 66.00 | B     | C       |
+|    111 | Adam    | 74.20 | B     | C       |
+|    113 | Rabiya  | 72.50 | B     | B       |
+|    105 | Kushal  | 51.60 | C     | C       |
+|    109 | Amaal   | 57.20 | C     | B       |
+|    106 | Raunaq  | 32.50 | F     | B       |
+|    114 | Rahil   | 32.00 | F     | C       |
+|    115 | Neha    | 32.00 | F     | A       |
++--------+---------+-------+-------+---------+
+
+3. Query to display all the distinct sections.
+
+SELECT DISTINCT section FROM marksheet;
+
+OUTPUT:
++---------+
+| section |
++---------+
+| A       |
+| B       |
+| C       |
++---------+
+
+4. Query to display the number of distinct sections.
+
+SELECT COUNT(DISTINCT section) FROM marksheet;
+
+OUTPUT:
++-------------------------+
+| COUNT(DISTINCT section) |
++-------------------------+
+|                       3 |
++-------------------------+
+
+5. Display the total marks and number of students from section A.
+
+SELECT SUM(marks), COUNT(marks) FROM marksheet WHERE section = 'A';
+
+OUTPUT:
++------------+--------------+
+| SUM(marks) | COUNT(*) |
++------------+--------------+
+|     180.00 |            3 |
++------------+--------------+
+
+6. Display the total marks and number of students from section B.
+
+SELECT SUM(marks), COUNT(*) FROM marksheet WHERE section = 'B';
+
+OUTPUT:
++------------+----------+
+| SUM(marks) | COUNT(*) |
++------------+----------+
+|     525.30 |        7 |
++------------+----------+
+
+7. Display the total marks and number of students from section C.
+
+SELECT SUM(marks), COUNT(*) FROM marksheet WHERE section = 'C';
+
+OUTPUT:
++------------+----------+
+| SUM(marks) | COUNT(*) |
++------------+----------+
+|     285.00 |        5 |
++------------+----------+
+

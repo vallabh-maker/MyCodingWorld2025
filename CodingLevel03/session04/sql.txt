@@ -1,0 +1,19 @@
+use school;
+
+create table student
+(
+    rollno integer,
+    name varchar(30),
+    phone bigint
+);
+
+desc student;
+
+select * from student;
+
+insert into student(rollno, name, phone)
+values (1001, 'Bob', 1234567890);
+insert into student(rollno, name, phone)
+values (1002, 'John', 2345678901);
+insert into student(rollno, name, phone)
+values (1003, 'Jack', 3456789012);
